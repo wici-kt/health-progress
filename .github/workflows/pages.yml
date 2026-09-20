@@ -26,7 +26,8 @@ jobs:
         run: |
           mkdir -p _site
           cp index.html _site/
-          cp -r assets archive data _site/
+          cp -r assets archive data zh _site/
+          echo "published:" && find _site -maxdepth 2 -type d | sort
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
