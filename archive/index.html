@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Health archive, 2018 to 2026</title>
+<meta name="description" content="A complete local reading of an Apple Health export: every metric, every workout, every mapped route, every ECG.">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="assets/styles.css?v=1">
+</head>
+<body>
+<a class="skip" href="#opening">Skip to the record</a>
+
+<header class="topbar" id="top">
+  <div class="topbar-inner">
+    <a class="wordmark" href="#opening">
+      <span class="wordmark-mark" aria-hidden="true"></span>
+      <span class="wordmark-text">Health archive</span>
+    </a>
+
+    <nav class="archive-nav" aria-label="Site">
+      <a href="../">Progress</a>
+      <a href="./" class="is-on">Archive</a>
+    </nav>
+
+    <div class="finder">
+      <label class="visually-hidden" for="search">Search metrics</label>
+      <input id="search" type="search" autocomplete="off" placeholder="Search metrics, e.g. heart, sleep, steps">
+      <div class="finder-results" id="search-results" hidden></div>
+    </div>
+
+    <div class="topbar-controls">
+      <div class="range" role="group" aria-label="Chart range">
+        <button type="button" data-range="all" class="is-on">All</button>
+        <button type="button" data-range="5y">5y</button>
+        <button type="button" data-range="1y">1y</button>
+        <button type="button" data-range="90d">90d</button>
+        <button type="button" data-range="30d">30d</button>
+      </div>
+      <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch colour theme">
+        <span class="theme-toggle-label">Theme</span>
+        <span class="theme-toggle-value" id="theme-value">Auto</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section class="opening" id="opening">
+    <div class="opening-copy">
+      <p class="kicker" id="opening-kicker">Apple Health export, read locally</p>
+      <h1 id="opening-headline">Every reading your devices kept, 2018 to 2026.</h1>
+      <p class="lede" id="opening-lede"></p>
+      <dl class="specimen" id="specimen"></dl>
+    </div>
+    <nav class="contents" aria-label="Sections">
+      <ol id="contents-list"></ol>
+    </nav>
+  </section>
+
+  <section class="section" id="coverage">
+    <header class="section-head">
+      <h2>What exists, and when</h2>
+      <p class="section-note">One lane per metric. The bar spans the first and last reading on record, and its fill shows how densely that metric was captured in each year.</p>
+    </header>
+    <div class="coverage-legend" id="coverage-legend"></div>
+    <div class="coverage" id="coverage-lanes"></div>
+  </section>
+
+  <section class="section" id="activity">
+    <header class="section-head">
+      <h2>Steps, distance and energy</h2>
+      <p class="section-note" id="activity-note"></p>
+    </header>
+    <div class="split">
+      <div class="panel panel-wide">
+        <div class="panel-head">
+          <h3 id="activity-title">Steps per day</h3>
+          <div class="bucket" role="group" aria-label="Time bucket">
+            <button type="button" data-bucket="day" class="is-on">Day</button>
+            <button type="button" data-bucket="week">Week</button>
+            <button type="button" data-bucket="month">Month</button>
+          </div>
+        </div>
+        <div class="chart" data-chart="activity-main"></div>
+      </div>
+      <div class="panel panel-rail">
+        <h3>Daylight profile</h3>
+        <p class="panel-note">Average steps by hour of day, all years.</p>
+        <div class="chart chart-short" data-chart="activity-hours"></div>
+        <h3>Weekday profile</h3>
+        <p class="panel-note">Average steps for each weekday.</p>
+        <div class="chart chart-short" data-chart="activity-weekday"></div>
+      </div>
+    </div>
+    <div class="stat-grid" id="activity-stats"></div>
+    <div class="table-block">
+      <h3>Steps by month</h3>
+      <div class="scroll" id="activity-months"></div>
+    </div>
+  </section>
+
+  <section class="section" id="heart">
+    <header class="section-head">
+      <h2>Heart</h2>
+      <p class="section-note" id="heart-note"></p>
+    </header>
+    <div class="split">
+      <div class="panel panel-wide">
+        <div class="panel-head">
+          <h3>Resting heart rate</h3>
+          <span class="panel-figure" data-figure="resting"></span>
+        </div>
+        <div class="chart" data-chart="heart-resting"></div>
+      </div>
+      <div class="panel panel-rail">
+        <h3>All 215,840 readings</h3>
+        <p class="panel-note">Distribution of every heart rate sample, watch and band alike.</p>
+        <div class="chart chart-short" data-chart="heart-histogram"></div>
+        <h3>Typical day</h3>
+        <p class="panel-note">Average heart rate by hour.</p>
+        <div class="chart chart-short" data-chart="heart-hours"></div>
+      </div>
+    </div>
+    <div class="trio" id="heart-trio"></div>
+    <div class="stat-grid" id="heart-stats"></div>
+  </section>
+
+  <section class="section" id="sleep">
+    <header class="section-head">
+      <h2>Sleep</h2>
+      <p class="section-note" id="sleep-note"></p>
+    </header>
+    <div class="split">
+      <div class="panel panel-wide">
+        <div class="panel-head">
+          <h3>Nightly stages</h3>
+          <div class="legend" id="sleep-legend"></div>
+        </div>
+        <div class="chart chart-tall" data-chart="sleep-nights"></div>
+      </div>
+      <div class="panel panel-rail">
+        <h3>Time asleep</h3>
+        <p class="panel-note">Hours asleep each night, most recent last.</p>
+        <div class="chart chart-mid" data-chart="sleep-duration"></div>
+        <h3>Bedtime and wake</h3>
+        <p class="panel-note">Clock positions across the archive.</p>
+        <div class="chart chart-mid" data-chart="sleep-clock"></div>
+      </div>
+    </div>
+    <div class="stat-grid" id="sleep-stats"></div>
+    <div class="notes-list" id="sleep-extremes"></div>
+  </section>
+
+  <section class="section" id="body">
+    <header class="section-head">
+      <h2>Body</h2>
+      <p class="section-note" id="body-note"></p>
+    </header>
+    <div class="split">
+      <div class="panel panel-wide">
+        <h3>Weight, every entry</h3>
+        <div class="chart" data-chart="body-weight"></div>
+      </div>
+      <div class="panel panel-rail">
+        <h3>BMI</h3>
+        <div class="chart chart-mid" data-chart="body-bmi"></div>
+        <h3>Body fat</h3>
+        <div class="chart chart-mid" data-chart="body-fat"></div>
+        <h3>Height and lean mass</h3>
+        <ul class="stat-list" id="body-other"></ul>
+      </div>
+    </div>
+    <div class="stat-grid" id="body-stats"></div>
+  </section>
+
+  <section class="section" id="mobility">
+    <header class="section-head">
+      <h2>Walking and mobility</h2>
+      <p class="section-note" id="mobility-note"></p>
+    </header>
+    <div class="small-multiples" id="mobility-multiples"></div>
+  </section>
+
+  <section class="section" id="vitals">
+    <header class="section-head">
+      <h2>Vitals, breathing and load</h2>
+      <p class="section-note" id="vitals-note"></p>
+    </header>
+    <div class="small-multiples" id="vitals-multiples"></div>
+  </section>
+
+  <section class="section" id="hearing">
+    <header class="section-head">
+      <h2>Sound exposure</h2>
+      <p class="section-note" id="hearing-note"></p>
+    </header>
+    <div class="split">
+      <div class="panel panel-wide">
+        <h3>Headphone levels</h3>
+        <p class="panel-note">Every headphone reading, by level. Apple flags sustained exposure above 80 dB.</p>
+        <div class="chart" data-chart="hearing-headphone"></div>
+      </div>
+      <div class="panel panel-rail">
+        <h3>Environment</h3>
+        <p class="panel-note">Sound around you, logged by the watch.</p>
+        <div class="chart chart-mid" data-chart="hearing-environment"></div>
+        <h3>Loud events</h3>
+        <ul class="stat-list" id="hearing-events"></ul>
+      </div>
+    </div>
+    <div class="stat-grid" id="hearing-stats"></div>
+  </section>
+
+  <section class="section" id="catalog">
+    <header class="section-head">
+      <h2>Every metric in the export</h2>
+      <p class="section-note">All <span id="catalog-count">47</span> health metrics that have at least one reading. Open a row to see its chart, every source that wrote to it, and the full day by day record. Sparse metrics also list every raw entry.</p>
+    </header>
+    <div class="catalog-controls">
+      <div class="chips" id="catalog-categories"></div>
+      <div class="catalog-sort">
+        <label for="catalog-sort">Sort by</label>
+        <select id="catalog-sort">
+          <option value="count">Most readings</option>
+          <option value="name">Name</option>
+          <option value="recent">Most recent</option>
+          <option value="range">Longest history</option>
+        </select>
+      </div>
+    </div>
+    <div class="catalog" id="catalog-list"></div>
+    <p class="catalog-empty" id="catalog-empty" hidden>Nothing matches that search.</p>
+  </section>
+
+  <section class="section" id="workouts">
+    <header class="section-head">
+      <h2>Workouts</h2>
+      <p class="section-note" id="workouts-note"></p>
+    </header>
+    <div class="catalog-controls">
+      <div class="chips" id="workout-types"></div>
+      <div class="catalog-sort">
+        <label for="workout-years">Year</label>
+        <select id="workout-years"></select>
+      </div>
+    </div>
+    <div id="workout-summary"></div>
+    <div class="scroll" id="workout-table"></div>
+  </section>
+
+  <section class="section" id="routes">
+    <header class="section-head">
+      <h2>Mapped routes</h2>
+      <p class="section-note" id="routes-note"></p>
+    </header>
+    <div class="route-grid" id="route-grid"></div>
+  </section>
+
+  <section class="section" id="ecg">
+    <header class="section-head">
+      <h2>Electrocardiograms</h2>
+      <p class="section-note" id="ecg-note"></p>
+    </header>
+    <div id="ecg-list"></div>
+  </section>
+
+  <section class="section" id="sources">
+    <header class="section-head">
+      <h2>Devices and apps</h2>
+      <p class="section-note" id="sources-note"></p>
+    </header>
+    <div class="split">
+      <div class="panel panel-wide">
+        <div class="source-bars" id="sources-bars"></div>
+      </div>
+      <div class="panel panel-rail">
+        <h3>Export details</h3>
+        <ul class="stat-list" id="export-details"></ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-notes" id="notes">
+    <header class="section-head">
+      <h2>How to read this</h2>
+    </header>
+    <div class="notes-cols" id="method-notes"></div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p id="footer-line"></p>
+</footer>
+
+<div class="tip" id="tip" hidden></div>
+
+<noscript>
+  <p style="max-width:60ch;margin:2rem auto;padding:0 1.5rem;font-family:system-ui">
+    This report draws its charts in the browser, so it needs JavaScript switched on.
+    The underlying data is unchanged either way: it lives in <code>assets/data.js</code>
+    inside this folder.
+  </p>
+</noscript>
+
+<script src="assets/app.js?v=1"></script>
+</body>
+</html>

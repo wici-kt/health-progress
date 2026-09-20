@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Health progress log</title>
+<meta name="description" content="Body, gym, run and meal progress tracked from Apple Health and a Notion logbook.">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="assets/styles.css?v=1">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="wordmark" href="./">
+      <span class="wordmark-mark" aria-hidden="true"></span>
+      <span>Health progress</span>
+    </a>
+    <nav class="nav" aria-label="Sections">
+      <a href="./" class="is-on">Overview</a>
+      <a href="archive/">Health archive</a>
+    </nav>
+    <div class="topbar-controls">
+      <span class="pill">last sync <span id="last-sync">pending</span></span>
+      <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch colour theme">
+        <span class="theme-toggle-label">Theme</span>
+        <span class="theme-toggle-value" id="theme-value">Auto</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section class="hero">
+    <div class="hero-top">
+      <div>
+        <h1>Getting to a normal BMI, one week at a time</h1>
+        <p class="hero-note">
+          Everything here is measured, not estimated. Apple Health supplies weight, body fat, sleep,
+          heart rate and every run; a Notion logbook supplies gym sessions, main lifts and daily meals.
+          The target is 70 kg, BMI under 25 and body fat around 16 to 17 percent.
+        </p>
+      </div>
+      <div class="countdown">
+        <div class="days" id="countdown-days">-</div>
+        <div class="label" id="countdown-label">loading</div>
+      </div>
+    </div>
+    <dl class="targets" id="targets"></dl>
+  </section>
+
+  <section class="grid grid-2" aria-labelledby="body-heading">
+    <div>
+      <div class="card">
+        <div class="card-head">
+          <h2 id="body-heading">Body weight</h2>
+          <div class="range" role="group" aria-label="Chart range">
+            <button type="button" data-body-range="all">All</button>
+            <button type="button" data-body-range="1y" class="is-on">1y</button>
+            <button type="button" data-body-range="90d">90d</button>
+          </div>
+        </div>
+        <p class="card-note">Every weigh-in from the scale, with the 70 kg target as a dashed line.</p>
+        <div class="chart chart-lg" id="body-weight-chart"></div>
+      </div>
+      <dl class="stats" id="body-stats"></dl>
+    </div>
+    <div>
+      <div class="card">
+        <h2>Body fat and waist</h2>
+        <p class="card-note">Scale body fat, plus waist measurements you log yourself in Notion.</p>
+        <div class="chart chart-md" id="body-fat-chart"></div>
+        <div id="waist-wrap"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid grid-2" aria-labelledby="gym-heading">
+    <div class="card">
+      <div class="card-head">
+        <h2 id="gym-heading">Gym</h2>
+        <span class="card-figure">goal <b>3 sessions</b> a week</span>
+      </div>
+      <p class="card-note">Sessions per week from the Notion logbook. The dashed line is the weekly goal.</p>
+      <div class="chart chart-md" id="gym-chart"></div>
+      <dl class="stats" id="gym-stats"></dl>
+    </div>
+    <div class="card">
+      <h2>Recent sessions</h2>
+      <p class="card-note">Session rows plus any main lifts you logged alongside them.</p>
+      <div class="table-wrap" id="gym-table"></div>
+    </div>
+  </section>
+
+  <section class="grid grid-2" aria-labelledby="run-heading">
+    <div class="card">
+      <div class="card-head">
+        <h2 id="run-heading">Running</h2>
+        <span class="card-figure">goal <b>3 sessions</b> a week</span>
+      </div>
+      <p class="card-note">Kilometres of running per week, straight from Apple Health workouts.</p>
+      <div class="chart chart-md" id="run-chart"></div>
+      <h3 style="margin-top:1.2rem">Pace, last 12 runs</h3>
+      <p class="card-note">Minutes per kilometre. Lower is faster.</p>
+      <div class="chart chart-sm" id="run-pace-chart"></div>
+      <dl class="stats" id="run-stats"></dl>
+    </div>
+    <div class="card">
+      <h2>Where you are in the plan</h2>
+      <p class="card-note">The ten-week walk-run progression, with the current week highlighted.</p>
+      <div class="table-wrap"><table class="data" id="run-plan"></table></div>
+      <h3 style="margin-top:1.2rem">Recent runs</h3>
+      <div class="table-wrap" id="run-table"></div>
+    </div>
+  </section>
+
+  <section class="grid grid-2" aria-labelledby="food-heading">
+    <div class="card">
+      <div class="card-head">
+        <h2 id="food-heading">Meals</h2>
+        <span class="card-figure">goal <b>1,900 kcal</b> and <b>150 g protein</b></span>
+      </div>
+      <p class="card-note">Daily totals from the Notion Meals database. Dashed line is the calorie goal.</p>
+      <div class="chart chart-md" id="food-chart"></div>
+      <h3 style="margin-top:1.2rem">Protein</h3>
+      <p class="card-note">Protein is what protects muscle at this deficit.</p>
+      <div class="chart chart-sm" id="protein-chart"></div>
+      <dl class="stats" id="food-stats"></dl>
+    </div>
+    <div class="card">
+      <h2>Recent days</h2>
+      <p class="card-note">The last ten logged days, newest first.</p>
+      <div class="table-wrap" id="food-table"></div>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="score-heading" style="margin-top:1.25rem">
+    <h2 id="score-heading">Daily scoreboard</h2>
+    <p class="card-note" id="score-note"></p>
+    <div class="table-wrap"><table class="score" id="score-table"></table></div>
+  </section>
+
+  <section aria-labelledby="support-heading" style="margin-top:1.5rem">
+    <h2 id="support-heading" style="margin-bottom:0.35rem">Supporting metrics</h2>
+    <p class="card-note">The recovery signals behind the weight trend. Sleep and resting heart rate explain more than training does.</p>
+    <div class="grid grid-3" id="supporting"></div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p id="footer-line"></p>
+</footer>
+
+<div class="tip" id="tip" hidden></div>
+
+<script src="assets/chart.js?v=1"></script>
+<script src="assets/dashboard.js?v=1"></script>
+</body>
+</html>

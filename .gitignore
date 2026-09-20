@@ -1,0 +1,14 @@
+# Apple Health source data stays on the machine: 41 MB zip, ~1 GB unzipped,
+# and the raw extraction the build step reads.
+health-data/
+data/archive.raw.json
+apple_health/
+*.zip
+
+# Local secrets
+.env
+.env.local
+NOTION_TOKEN
+
+.DS_Store
+node_modules/

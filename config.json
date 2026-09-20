@@ -1,0 +1,5 @@
+{
+  "parentPageId": null,
+  "databases": {},
+  "notes": "Run tools/setup-notion.mjs with your Notion page id to fill this in. Database ids are not secret; the token is kept in the NOTION_TOKEN repository secret."
+}
