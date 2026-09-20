@@ -88,8 +88,6 @@
   }
   function applyTheme() {
     document.documentElement.dataset.theme = resolvedTheme();
-    var label = document.getElementById("theme-value");
-    if (label) label.textContent = themeMode === "auto" ? "Auto" : themeMode === "dark" ? "Dark" : "Light";
     document.dispatchEvent(new CustomEvent("themechange"));
   }
   function initTheme() {
@@ -623,6 +621,7 @@
     longDate: longDate, shortDate: shortDate, clockOf: clockOf, months: MONTHS,
     // theme and drawing
     initTheme: initTheme, applyTheme: applyTheme, cssv: cssv, resolvedTheme: resolvedTheme,
+    themeMode: function () { return themeMode; },
     tip: tip, hideTip: hideTip, clearCharts: clearCharts, redrawAll: redrawAll,
     axes: axes, niceTop: niceTop, binPoints: binPoints, nearest: nearest, drawEmpty: drawEmpty,
     lineChart: lineChart, barChart: barChart, histogramChart: histogramChart,

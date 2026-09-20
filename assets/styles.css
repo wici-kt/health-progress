@@ -93,6 +93,47 @@ a { color: inherit; }
 }
 .theme-toggle-value { color: var(--ink); font-family: var(--mono); font-size: 0.75rem; }
 
+.lang { display: inline-flex; border: 1px solid var(--hair); border-radius: var(--radius); overflow: hidden; }
+.lang button, .lang a {
+  border: 0; border-right: 1px solid var(--hair); background: none; color: var(--muted);
+  font: inherit; font-size: 0.76rem; padding: 0 0.55rem; height: 32px; cursor: pointer;
+  text-decoration: none; display: inline-flex; align-items: center;
+}
+.lang button:last-child, .lang a:last-child { border-right: 0; }
+.lang button:hover, .lang a:hover { color: var(--ink); background: var(--surface-2); }
+.lang button.is-on, .lang a.is-on { background: var(--ink); color: var(--paper); }
+
+/* Long-form document (the Chinese report) */
+.prose { max-width: 78ch; }
+.prose h1 { font-size: clamp(1.6rem, 3vw, 2.2rem); margin-bottom: 0.6rem; }
+.prose h2 {
+  font-size: clamp(1.2rem, 2.2vw, 1.5rem); margin: 2.2rem 0 0.7rem;
+  padding-top: 1.1rem; border-top: 1px solid var(--hair);
+}
+.prose h3 { font-size: 1rem; margin: 1.6rem 0 0.5rem; }
+.prose p { margin: 0.7rem 0; color: var(--ink-2); }
+.prose strong { color: var(--ink); font-weight: 600; }
+.prose ul, .prose ol { margin: 0.7rem 0; padding-left: 1.3rem; color: var(--ink-2); }
+.prose li { margin: 0.3rem 0; }
+.prose code {
+  font-family: var(--mono); font-size: 0.86em; background: var(--surface-2);
+  padding: 0.1rem 0.3rem; border-radius: var(--radius);
+}
+.prose table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: 0.85rem; }
+.prose th {
+  text-align: left; background: var(--surface-2); font-family: var(--mono); font-size: 0.66rem;
+  letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); font-weight: 500;
+  padding: 0.5rem 0.7rem; border-bottom: 1px solid var(--hair-strong); white-space: nowrap;
+}
+.prose td { padding: 0.45rem 0.7rem; border-bottom: 1px solid var(--hair); color: var(--ink-2); }
+.prose hr { border: 0; border-top: 1px solid var(--hair); margin: 2rem 0; }
+.page-body { padding: clamp(1.5rem, 4vh, 2.5rem) 0 3rem; }
+.callout {
+  border: 1px solid var(--hair); background: var(--surface); padding: 0.9rem 1.1rem;
+  font-size: 0.85rem; color: var(--ink-2); margin-bottom: 1.5rem;
+}
+.callout a { color: var(--accent-ink); }
+
 main { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad) 3rem; }
 
 /* ------------------------------------------------------------------- hero */
@@ -198,6 +239,9 @@ td.num, th.num { text-align: right; font-family: var(--mono); font-variant-numer
   .topbar { position: static; }
   .topbar-inner { height: auto; flex-wrap: wrap; padding-top: 0.6rem; padding-bottom: 0.6rem; row-gap: 0.5rem; }
   .nav { order: 3; flex-basis: 100%; margin-left: 0; }
+  .pill { display: none; }
+  .lang button, .lang a { height: 28px; padding: 0 0.45rem; }
+  .theme-toggle { height: 28px; }
   .countdown { text-align: left; }
   .theme-toggle-label { display: none; }
   .chart-lg { height: 220px; }

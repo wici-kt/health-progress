@@ -7,8 +7,13 @@ body fat around 16 to 17 percent), tracked from Apple Health and a Notion logboo
 
 | Page | What it shows |
 | --- | --- |
-| `/` | Targets, body weight and body fat, gym sessions, running, meals, the daily scoreboard and supporting recovery metrics |
-| `/archive/` | The full Apple Health report: 47 metrics, 174 workouts, 137 routes, 6 ECGs |
+| `/` | Targets, body weight and body fat, gym sessions, running, meals, the daily scoreboard and supporting recovery metrics. Switch between English and Traditional Chinese in the header |
+| `/archive/` | The full Apple Health report in English: 47 metrics, 174 workouts, 137 routes, 6 ECGs |
+| `/zh/archive/` | The same report as a written Traditional Chinese document, generated from `archive/report-zh-hk.md` |
+
+Language: the choice in the header is remembered in the browser and defaults to the
+browser language. The dashboard is fully bilingual; the interactive archive is English
+and pairs with the Chinese report page, linked from the language switch on both.
 
 ## Where the data comes from
 

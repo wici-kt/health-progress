@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="zh-Hant-HK">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>健康數據報告</title>
+<meta name="description" content="Apple Health 數據分析報告（繁體中文，香港）。">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="../../assets/styles.css?v=2">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="wordmark" href="../../">
+      <span class="wordmark-mark" aria-hidden="true"></span>
+      <span>健康進度</span>
+    </a>
+    <nav class="nav" aria-label="網站">
+      <a href="../../">進度總覽</a>
+      <a href="./" class="is-on">健康數據庫</a>
+    </nav>
+    <div class="topbar-controls">
+      <div class="lang" role="group" aria-label="語言">
+        <a href="../../archive/">EN</a>
+        <a href="./" class="is-on">中文</a>
+      </div>
+      <button type="button" class="theme-toggle" id="theme-toggle" aria-label="切換主題">
+        <span class="theme-toggle-label">主題</span>
+        <span class="theme-toggle-value" id="theme-value">自動</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="page-body">
+  <div class="callout">
+    這一頁是健康數據庫的中文報告版本。想睇全部 47 項指標、137 條路線同 6 次心電圖的互動版，
+    請去 <a href="../../archive/">英文互動版</a>；想睇每日進度，去 <a href="../../">進度總覽</a>。
+  </div>
+  <article class="prose">
+<h1>Apple Health 數據報告</h1>
+<p><strong>資料期間：2018年1月15日 至 2026年9月15日　｜　匯出時間：2026年9月15日 14:24（香港時間）</strong></p>
+<hr>
+<h2>一、一頁摘要</h2>
+<p><strong>三件最需要留意的事</strong></p>
+<ol>
+<li><strong>睡眠又夜又短。</strong> 2026年6月至今有記錄的夜晚，真正夜睡只有 12 晚：入睡中位數係 <strong>04:51</strong>，起床中位數 <strong>10:38</strong>，主睡眠平均只有 <strong>5.21 小時</strong>；另外 6 晚係中午 12:00 至 14:30 的午睡（約 2 小時）。整體 219 個有分期記錄的夜晚，平均 5.12 小時，<strong>59% 少於 6 小時</strong>，只有 15 晚睡足 8 小時。</li>
+<li><strong>心臟指標近三個月一致轉差。</strong> 靜息心率由 2026年第二季的 69.8 bpm 升至第三季的 <strong>80.4 bpm</strong>（近 69 日有 39 日 ≥80 bpm）；同期 HRV 由 43.3 ms 跌至 <strong>34.8 ms</strong>。兩者本來就係反向相關（r = -0.59），今次兩邊同時向壞方向走。</li>
+<li><strong>體重回升。</strong> 由 2026年4－5月最低 <strong>76.9 kg</strong> 升到 9月的 <strong>79.3 kg</strong>，約回升 2.4 kg。身高 168 cm，BMI 27.8，體脂 25.9%。</li>
+</ol>
+<p><strong>同時做得好，唔需要改</strong></p>
+<ul>
+<li>活動量係 8 年來最高：近 12 個月平均 <strong>6,439 步／日</strong>，2026年平均 6,448 步。</li>
+<li>運動量足夠：近一年每週平均 <strong>192 分鐘</strong>，53 週有 39 週達到 150 分鐘的建議水平。</li>
+<li>耳機音量控制得非常好：只有 0.1% 讀數超過 80 dB，0% 超過 90 dB。</li>
+<li>6 次心電圖全部係正常竇性心律（Sinus Rhythm）。</li>
+<li>一分鐘心率恢復平均 29 bpm，屬良好水平。</li>
+</ul>
+<hr>
+<h2>二、這份數據本身（先講可信度）</h2>
+<p>匯出檔案包含 <strong>1,847,799 個讀數、47 項健康指標、174 次運動、137 條 GPS 路線、6 次心電圖</strong>。</p>
+<p><strong>三個時期，代表三種不同的準確度</strong></p>
+<table><thead><tr><th>時期</th><th>記錄工具</th><th>注意事項</th></tr></thead><tbody>
+<tr><td>2018年1月 － 2023年11月</td><td>手機（iPhone）＋ Huawei 手環</td><td>步數係「手機的移動」，唔完全等於你本人的活動量。2020年平均 1,129 步、中位數 66 步，係手機留在家中的結果</td></tr>
+<tr><td>2023年11月8日 － 現在</td><td>Apple Watch（主要）</td><td>心臟、睡眠、血氧、運動等指標由這裡開始，數據最完整</td></tr>
+<tr><td>全期</td><td>另一部手機（Wing）＋ Huawei 手環</td><td>與手錶重疊記錄，會造成重複計算</td></tr>
+</tbody></table>
+<p><strong>我在分析時修正了一個重要問題：重複計算</strong></p>
+<p>手錶同時手機一齊記錄同一段步行。如果直接將所有來源相加，同一日就會計算兩次。例如 2026年9月14日：手錶 9,352 步、手機 8,984 步，相加變 18,336 步，實際上約 <strong>9,300 步</strong>。</p>
+<p>我改為每日只採用一部主要裝置（先 Apple Watch，然後 iPhone，最後才用 Huawei 手環），共修正 3,051 個「指標日」。結果：</p>
+<ul>
+<li>累計步數由 18,402,377 步修正為 <strong>11,545,955 步</strong></li>
+<li>累計距離由 12,953 公里修正為 <strong>8,220 公里</strong></li>
+</ul>
+<p>Huawei 手環偶爾會高估 2 至 6 倍。例如 2026年8月20日，手環記錄 44,328 步 / 31 公里，而手錶只有 7,692 步 / 5.74 公里，手機 6,905 步 / 4.94 公里。這類日子以手錶為準。</p>
+<p><strong>資料完整度（過去 365 日）</strong></p>
+<ul>
+<li>步數：364 / 365 日</li>
+<li>靜息心率：292 日　｜　HRV：296 日</li>
+<li>睡眠：只有 135 日，而且 <strong>8月30日之後完全沒有記錄</strong>（手錶仍有夜間心率，即係睡眠追蹤設定或佩戴習慣改變）</li>
+<li>血氧：284 日　｜　運動分鐘：293 日</li>
+<li>睡眠只有 219 晚有完整分期（深睡／核心／REM），其餘只記錄「在床上」時間</li>
+</ul>
+<hr>
+<h2>三、活動量</h2>
+<p><strong>終身累計：</strong> 11,545,955 步、步行及跑步 8,220 公里、活動消耗 315,024 kcal、爬升 20,501 層樓梯。</p>
+<p><strong>年度平均步數走勢（清晰向上）</strong></p>
+<table><thead><tr><th>年份</th><th>平均步數／日</th></tr></thead><tbody>
+<tr><td>2021</td><td>2,606</td></tr>
+<tr><td>2022</td><td>3,248</td></tr>
+<tr><td>2023</td><td>4,062</td></tr>
+<tr><td>2024</td><td>5,010</td></tr>
+<tr><td>2025</td><td>5,879</td></tr>
+<tr><td>2026（至9月）</td><td><strong>6,448</strong></td></tr>
+</tbody></table>
+<p><strong>近 12 個月</strong></p>
+<ul>
+<li>平均 6,439 步／日，中位數 6,818 步</li>
+<li>每日步數分佈相當兩極：<strong>少於 4,000 步有 110 日（30%）</strong>、6,000－8,000 步 77 日、10,000 步以上 69 日（19%）</li>
+<li>最高一日：30,362 步（2026年4月18日）</li>
+<li>平日平均 8,021 步，週末只有 4,982 步，<strong>週末少約 38%</strong></li>
+</ul>
+<p><strong>運動</strong></p>
+<ul>
+<li>近一年平均每日 34.7 分鐘運動，每週 192 分鐘</li>
+<li>174 次運動記錄：步行 156 次（88.5 小時、308 公里）、跑步 13 次（5.4 小時、31.7 公里）、混合有氧 2 次、羽毛球 1 次、單車 1 次、<strong>重力訓練 1 次</strong></li>
+<li>跑步平均配速 10.59 分鐘／公里（即約 5.7 km/h），實際上接近急步走的速度</li>
+<li>8.7 年之間，重力訓練只做過 1 次</li>
+</ul>
+<hr>
+<h2>四、心臟</h2>
+<p><strong>靜息心率（季度平均）</strong></p>
+<table><thead><tr><th>時期</th><th>bpm</th></tr></thead><tbody>
+<tr><td>2024年第一季</td><td>66.7</td></tr>
+<tr><td>2024年第四季 － 2025年第二季</td><td>75.0 － 76.0</td></tr>
+<tr><td>2026年第一至第二季</td><td>70.3 － 69.8</td></tr>
+<tr><td><strong>2026年第三季（7－9月）</strong></td><td><strong>80.4</strong></td></tr>
+</tbody></table>
+<p>近 90 日有 39 日靜息心率 ≥80 bpm，最高一次 103 bpm（2026年9月5日）。</p>
+<p><strong>心率變異度（HRV）</strong></p>
+<p>2024年第一季 48.6 ms → 2025年第二季 35.8 ms → 2025年第四季至2026年第二季 43 ms 左右 → <strong>2026年第三季 34.8 ms</strong>。</p>
+<p>HRV 與靜息心率的相關系數 r = -0.59，屬正常生理關係；2026年第三季兩者同時轉差，屬一致訊號，唔係單一指標的雜訊。</p>
+<p><strong>最大攝氧量（VO2max）</strong></p>
+<p>最高 37.5 mL/kg/min（2025年6月7日），最近幾次：31.0（8月25日）、29.6（8月29日）、30.1（9月5日）、32.2（9月12日）、<strong>33.1（9月15日）</strong>。對 20 歲男性而言屬偏低水平。</p>
+<p><strong>其他心臟數據</strong></p>
+<ul>
+<li>一分鐘心率恢復：平均 29 bpm（良好；低於 12 bpm 才算差）</li>
+<li>步行時平均心率：全期 117.6 bpm，近 90 日 121.3 bpm</li>
+<li>全部 215,840 個心率讀數中，46.8% ≥100 bpm、22.3% ≥120 bpm、1.8% ≥160 bpm（包括運動時段）</li>
+</ul>
+<p><strong>睡眠與心臟的關係</strong></p>
+<p>睡得越少，翌日靜息心率越高（r = -0.28，206 晚），HRV 越低（r = +0.25，208 晚）。相關系數屬中等，唔可以當成因果，但方向與「睡眠不足會推高靜息心率」一致。</p>
+<hr>
+<h2>五、睡眠（最需要處理的一項）</h2>
+<p><strong>近期實況（2026年6月至今）</strong></p>
+<ul>
+<li>真正夜睡的 12 晚：入睡中位數 <strong>04:51</strong>（最早 02:47、最遲 07:06），起床中位數 <strong>10:38</strong>，平均睡 <strong>5.21 小時</strong></li>
+<li>另外 6 晚只有中午 12:00 － 14:30 的午睡，約 2 小時</li>
+</ul>
+<p><strong>全部有分期的 219 晚</strong></p>
+<ul>
+<li>平均 5.12 小時，中位數 5.28 小時</li>
+<li>少於 6 小時：129 晚（59%）｜6－8 小時：75 晚｜8 小時以上：<strong>只有 15 晚</strong></li>
+<li>入睡時間極不規律，標準差達 370 分鐘</li>
+</ul>
+<p><strong>睡眠分期</strong></p>
+<table><thead><tr><th>階段</th><th>平均時數</th><th>佔比</th></tr></thead><tbody>
+<tr><td>深睡</td><td>0.69 小時</td><td>13%</td></tr>
+<tr><td>核心睡眠</td><td>3.25 小時</td><td>64%</td></tr>
+<tr><td>REM</td><td>1.18 小時</td><td>23%</td></tr>
+<tr><td>清醒</td><td>0.15 小時</td><td>－</td></tr>
+</tbody></table>
+<p>深睡比例 13% 屬偏低（一般 15－20%），通常與睡眠時間不足、入睡時間太夜有關。</p>
+<p><strong>資料缺口：</strong> 2026年8月30日之後再無睡眠記錄，呼吸頻率亦同日停止，所以過去兩星期無從判斷。</p>
+<hr>
+<h2>六、身體組成</h2>
+<ul>
+<li>首次記錄：2019年6月11日，53.0 kg（當時 13 歲）</li>
+<li>最新記錄：2026年9月13日，<strong>79.5 kg</strong>；全期最高 82.8 kg</li>
+<li>身高 168 cm（只記錄過一次，量度日期不詳）</li>
+</ul>
+<p><strong>近一年走勢</strong></p>
+<table><thead><tr><th>時期</th><th>體重</th></tr></thead><tbody>
+<tr><td>2025年7－10月</td><td>80.6 － 82.3 kg</td></tr>
+<tr><td>2026年4－5月</td><td><strong>76.9 kg（最低）</strong></td></tr>
+<tr><td>2026年8－9月</td><td>78.9 － 79.5 kg</td></tr>
+</tbody></table>
+<p>即係先減約 5 kg，再回升約 2.4 kg。</p>
+<ul>
+<li>BMI 27.8（最高 28.6）</li>
+<li>體脂 25.9%（2025年7月最高 26.5%）</li>
+</ul>
+<p>由於 2019－2020 年正值發育期，整段體重上升有相當部分屬正常成長。但<strong>過去一年的變化</strong>（先減後回升）才是可以控制的範圍。體重回升期間只做過 1 次重力訓練，即係增加的重量較大機會係脂肪。</p>
+<hr>
+<h2>七、其他指標</h2>
+<p><strong>血氧：</strong> 平均 96.2%，但有 26.9% 的讀數低於 95%，最低一次 83%。手錶血氧在夜間容易因移位而出現偏低讀數，屬常見現象。如果同時有鼻鼾、日間極度疲倦、睡醒頭痛，值得同醫生講。</p>
+<p><strong>呼吸頻率：</strong> 平均 12.9 次／分鐘（正常範圍 12－20）。</p>
+<p><strong>步行質素：</strong></p>
+<ul>
+<li>步行速度 4.53 km/h（對 20 歲而言偏慢）</li>
+<li>步幅 69 cm　｜　雙腳支撐時間 28.6%（偏高，代表步速較慢）</li>
+<li>左右不對稱 1.27%（正常，5% 以內都可以接受）</li>
+<li>六分鐘步行測試 498.8 米（良好）　｜　上樓梯速度 0.37 m/s（偏慢）</li>
+<li>步行穩定度 96.9%（良好）</li>
+</ul>
+<p><strong>聽力：</strong> 耳機平均 60.5 dB，只有 0.1% 讀數 ≥80 dB、0.0%（6 次）≥90 dB，最高 96 dB，控制得很好。真正的風險來自環境噪音：6.1% 讀數 ≥80 dB、0.8% ≥90 dB，手錶記錄了 <strong>2,805 次「環境噪音超標」事件，分散在 589 日</strong>。建議在高噪音環境（地鐵、裝修、演唱會）用耳塞。</p>
+<p><strong>心電圖：</strong> 6 次記錄，全部為竇性心律（正常）。</p>
+<p><strong>2020年：</strong> 全年平均 1,129 步，中位數 66 步。這並非活動量崩塌，而是手機留在家中的記錄痕跡，不過也可以當作疫情年的生活紀錄。</p>
+<hr>
+<h2>八、建議（按優先次序）</h2>
+<h3>1. 先處理睡眠時間（回報最大）</h3>
+<p>你的數據顯示，睡眠時數與靜息心率、HRV 有清楚關聯，而近三個月三者同時轉差。建議由「固定起床時間」入手：</p>
+<ul>
+<li><strong>固定起床時間：</strong> 連續三星期，每日同一時間起床（例如 08:30），週末最多遲 1 小時。起床時間固定比入睡時間固定更有效。</li>
+<li><strong>逐步提早入睡：</strong> 每 3－4 日將上床時間提早 20－30 分鐘，由現時 04:50 慢慢推到 01:00 前後，唔需要一次過改。</li>
+<li><strong>午睡設上限：</strong> 20－30 分鐘，並且在下午 3 點前完成。用 2 小時午睡補眠會令當晚更難早睡。</li>
+<li><strong>早上見光：</strong> 起床後 30 分鐘內接觸陽光 10－15 分鐘，對延遲型睡眠時鐘特別有效。</li>
+<li><strong>咖啡因：</strong> 最後一杯在睡前 8 小時前（即下午 5 點前）。如果你現時有飲能量飲品或奶茶，這一步的效果會很明顯。</li>
+<li><strong>睡前一小時：</strong> 調暗燈光、遠離手機。你現時的入睡時間 04:51，多數與夜間屏幕使用有關。</li>
+</ul>
+<p>目標：<strong>每晚 7 小時以上、入睡時間中位數在 01:00 之前</strong>。</p>
+<h3>2. 心臟指標（跟著睡眠走，先觀察）</h3>
+<ul>
+<li>連續 4 星期每晚戴手錶睡覺，觀察靜息心率與 HRV 是否回落。</li>
+<li>目標：靜息心率回到 <strong>70 bpm 附近</strong>，HRV 回到 <strong>40 ms 以上</strong>。</li>
+<li>如果睡眠已明顯改善，但靜息心率持續 ≥80 bpm 超過兩星期，或者出現心悸、氣促、胸痛、暈眩，就應該睇醫生。2026年9月5日那次 103 bpm 值得留意。</li>
+</ul>
+<h3>3. 體能（提升 VO2max）</h3>
+<p>現時 33.1 mL/kg/min，對 20 歲男性屬偏低；但你的基礎很好（每日 6,000 步以上、每週 192 分鐘運動），改善空間大。</p>
+<ul>
+<li><strong>每週 2 次間歇：</strong> 4 分鐘快（心率 150－165）＋ 2 分鐘慢，重複 5 次；或者用現有的跑步記錄做 3 公里漸進跑。</li>
+<li><strong>每週 1 次長走：</strong> 45－60 分鐘輕鬆步行（心率 120－135），維持每月約 30 公里的步行量。</li>
+<li><strong>每週 2 次基礎阻力訓練：</strong> 深蹲、推、拉、髖鉸鏈、核心，每次 20－30 分鐘。這是你 8 年來最大的空白（只有 1 次記錄），亦是改善體脂與 BMI 最直接的方法。</li>
+</ul>
+<h3>4. 身體組成</h3>
+<ul>
+<li>目標唔係急速減磅：<strong>每月減 0.5－1 kg 為上限</strong>，先回到 76－77 kg（即 2026年4－5月的水平）。</li>
+<li>蛋白質每日約 1.6 g/kg（約 120－125 g），配合上面的阻力訓練。</li>
+<li><strong>每週固定一日、同一時間、同一部磅量一次</strong>。你現在習慣連續幾日量，然後隔幾星期唔量，難以判斷趨勢。</li>
+</ul>
+<h3>5. 週末活動</h3>
+<p>週末比平日少約 3,000 步。設一個固定的週末活動（例如星期六早上行山或 45 分鐘步行），已可補回大部分差距。</p>
+<h3>6. 數據習慣</h3>
+<ul>
+<li><strong>每晚戴手錶睡覺</strong>：現在 8月30日之後再無睡眠記錄，等於失去最重要的監測指標。</li>
+<li><strong>避免同時用手環與手錶記錄同一日活動</strong>：原始匯出仍然會有重複數據，今次已由分析修正，但最理想係只用一部裝置。</li>
+<li><strong>每 1－2 個月匯出一次</strong>：趨勢比單日數字更有意義，亦可以及早發現變化。</li>
+</ul>
+<hr>
+<h2>九、怎樣驗證有冇改善</h2>
+<table><thead><tr><th>時間</th><th>檢查項目</th><th>目標</th></tr></thead><tbody>
+<tr><td>4 星期後（約 2026年10月中）</td><td>靜息心率、HRV、平均睡眠時數</td><td>靜息心率 ≤75 bpm、HRV ≥40 ms、睡眠 ≥6.5 小時</td></tr>
+<tr><td>8 星期後（約 2026年11月中）</td><td>體重、體脂、VO2max、週末步數</td><td>體重 77－78 kg、VO2max ≥34</td></tr>
+</tbody></table>
+<p>重新匯出一次 Health 資料，再用同一個報告頁面開啟，所有數字會自動更新，到時可以直接比較。</p>
+<hr>
+<h2>十、注意事項</h2>
+<ul>
+<li>以上係基於你自己的數據所做的分析與一般健康建議，<strong>並非醫療診斷</strong>。</li>
+<li>如果出現持續心悸、胸痛、氣促、暈眩、嚴重日間疲倦，或睡眠中出現呼吸停止，請盡快求醫。</li>
+<li>手錶的靜息心率、HRV、VO2max、血氧全部係估算值，會受佩戴情況、氣溫、壓力、酒精、咖啡因、生病等因素影響。<strong>單一數字唔代表一切，睇趨勢最實際。</strong></li>
+</ul>
+<hr>
+<p><em>本報告由 1,847,799 個 HealthKit 記錄分析而成。原始數據及互動網頁在 <code>index.html</code>，分析腳本在 <code>tools/</code>。</em></p>
+  </article>
+</main>
+
+<footer class="footer">
+  <p>報告由 1,847,799 個 HealthKit 記錄分析而成。<span id="built">2026-09-20</span></p>
+</footer>
+
+<div class="tip" id="tip" hidden></div>
+<script src="../../assets/i18n.js?v=2"></script>
+<script src="../../assets/chart.js?v=2"></script>
+<script>
+  // The Chinese page is a static document; the language switch is links, so
+  // only the theme control needs wiring. The dashboard preference is left
+  // untouched, so visiting this page does not change the other pages.
+  (function () {
+    HealthCharts.initTheme();
+    var label = document.getElementById("theme-value");
+    function paint() {
+      var mode = HealthCharts.themeMode();
+      label.textContent = mode === "auto" ? "自動" : mode === "dark" ? "深色" : "淺色";
+    }
+    document.addEventListener("themechange", paint);
+    paint();
+  })();
+</script>
+</body>
+</html>
