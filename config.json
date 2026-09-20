@@ -1,5 +1,27 @@
 {
-  "parentPageId": null,
-  "databases": {},
-  "notes": "Run tools/setup-notion.mjs with your Notion page id to fill this in. Database ids are not secret; the token is kept in the NOTION_TOKEN repository secret."
+  "parentPageId": "3e18aabf67698099b330d5f3b65dd18a",
+  "databases": {
+    "gymSessions": {
+      "databaseId": "60a2bf4f-48d6-446a-a4cc-cfd19c705a56",
+      "dataSourceId": "ec1bd0d9-d011-4099-be3d-1b80530fdcb2",
+      "title": "Gym Sessions"
+    },
+    "lifts": {
+      "databaseId": "2db5c952-fa9d-4452-8d04-b80f7da878e4",
+      "dataSourceId": "6ce0d6dc-97e5-45d1-89b2-f67a49aeff83",
+      "title": "Gym Lifts"
+    },
+    "meals": {
+      "databaseId": "ea2c9fed-60cf-4f2a-83dd-edd49c203e11",
+      "dataSourceId": "3ef1efe8-fee1-4104-aa47-8ce12f648559",
+      "title": "Meals"
+    },
+    "body": {
+      "databaseId": "c97b08c8-71c7-47a9-b995-d6f8775fd58f",
+      "dataSourceId": "96a969ae-8213-4120-a237-ea6e1727905b",
+      "title": "Body"
+    }
+  },
+  "notes": "Run tools/setup-notion.mjs with your Notion page id to fill this in. Database ids are not secret; the token is kept in the NOTION_TOKEN repository secret.",
+  "updatedAt": "2026-09-20T14:27:39Z"
 }
