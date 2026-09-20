@@ -166,8 +166,12 @@ async function main() {
   });
 
   if (!changed) {
-    console.log("No change since the last sync, leaving data/logbook.json alone.");
-    return;
+    if (previous.syncedAt) {
+      console.log("No change since the last sync, leaving data/logbook.json alone.");
+      return;
+    }
+    // First run after setup: record that the connection works, even with no rows yet.
+    console.log("First successful sync with no rows logged yet; recording the sync time.");
   }
 
   const payload = {
