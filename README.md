@@ -20,7 +20,20 @@ and pairs with the Chinese report page, linked from the language switch on both.
 | Source | Supplies | How it updates |
 | --- | --- | --- |
 | Apple Health export | weight, body fat, BMI, sleep, resting heart rate, HRV, VO2 max, steps, every run and walk | `node tools/refresh-health.mjs ~/Downloads/export.zip`, then commit and push |
-| Notion logbook | gym sessions, main lifts, daily meal totals, waist measurements | GitHub Action every night at 22:00 Hong Kong time |
+| Notion logbook | gym sessions, main lifts, meals (one row per meal, calories auto-filled from the template), waist measurements | GitHub Action every night at 22:00 Hong Kong time |
+| Strong app (optional) | per-set gym detail | `node tools/import-strong.mjs export.csv`, then commit |
+
+## Logging, the short version
+
+| What | Where | How long |
+| --- | --- | --- |
+| Meals | Notion → Meals: Date, Meal, Template (calories and protein come from the template) | 30 seconds a day |
+| Gym | Notion → Gym Sessions (date, type, duration, RPE) and Gym Lifts for main lifts, or the Strong app | 20 seconds a session |
+| Waist | Notion → Body: Date, Waist cm | every 2-4 weeks |
+| Weight, body fat, sleep, runs | Apple Health, refreshed with `node tools/refresh-health.mjs ~/Downloads/export.zip` | when you re-export |
+
+Notion also offers a Form view (Meals → the view menu → New view → Form → Copy link to view),
+which gives you a plain web form to fill on your phone instead of editing the table.
 
 ## Files
 

@@ -218,8 +218,14 @@
 
   function renderGym() {
     var log = data.logbook;
-    var sessions = (log && log.gymSessions) || [];
-    var lifts = (log && log.lifts) || [];
+    var strong = data.strong || { gymSessions: [], lifts: [] };
+    /* Strong (via CSV) and the Notion logbook can both carry sessions, so a day
+       logged in both places is counted once. */
+    var notionSessions = (log && log.gymSessions) || [];
+    var notionDates = {};
+    notionSessions.forEach(function (s) { notionDates[s.date] = true; });
+    var sessions = notionSessions.concat((strong.gymSessions || []).filter(function (s) { return !notionDates[s.date]; }));
+    var lifts = ((log && log.lifts) || []).concat(strong.lifts || []);
 
     if (!sessions.length) {
       $("gym-chart").innerHTML = emptyBlock(t("gym.emptyTitle"), t("gym.emptyHelp"));
@@ -370,61 +376,78 @@
       return;
     }
 
+    /* Meals arrive one row per meal, so the day is the unit that matters. */
+    function dayTotals(date) {
+      var rows = meals.filter(function (m) { return m.date === date; });
+      return {
+        date: date,
+        rows: rows,
+        calories: rows.reduce(function (s, r) { return s + (r.calories || 0); }, 0),
+        proteinG: rows.reduce(function (s, r) { return s + (r.proteinG || 0); }, 0),
+        waterL: rows.reduce(function (s, r) { return s + (r.waterL || 0); }, 0),
+        templates: rows.map(function (r) { return r.template || r.notes || ""; }).filter(Boolean)
+      };
+    }
+    function onTargetDay(totals) {
+      return totals.rows.length > 0 &&
+        totals.calories > 0 && totals.calories <= targets.kcal &&
+        totals.proteinG >= Math.round(targets.proteinG * 0.9);
+    }
+
     var days = [];
     for (var i = 13; i >= 0; i--) {
       var date = addDays(today(), -i);
-      var row = meals.filter(function (m) { return m.date === date; })[0];
-      days.push({
-        label: i % 2 === 0 ? String(+date.slice(8)) : "",
-        value: row && row.calories ? row.calories : 0,
-        date: date,
-        protein: row ? row.proteinG : null
-      });
+      var totals = dayTotals(date);
+      days.push({ label: i % 2 === 0 ? String(+date.slice(8)) : "", date: date, totals: totals });
     }
     C.barChart($("food-chart"), {
-      items: days.map(function (d) { return { label: d.label, value: d.value, date: d.date, protein: d.protein }; }),
+      items: days.map(function (d) { return { label: d.label, value: d.totals.calories, date: d.date, protein: d.totals.proteinG, rows: d.totals.rows.length }; }),
       goal: targets.kcal, formatY: function (v) { return C.compact(v); },
       tip: function (item) {
         return "<b>" + dateText(item.date) + "</b><br>" +
           (item.value ? item.value + " kcal" : t("food.notLogged")) +
-          (item.protein ? "<br>" + item.protein + " g" : "");
+          (item.protein ? "<br>" + item.protein + " g" : "") +
+          (item.rows ? "<br>" + item.rows + " entries" : "");
       }
     });
 
-    var week = withinDays(meals, 7);
-    var month = withinDays(meals, 28);
+    var weekDates = [], monthDates = [];
+    for (var w = 6; w >= 0; w--) weekDates.push(addDays(today(), -w));
+    for (var m2 = 27; m2 >= 0; m2--) monthDates.push(addDays(today(), -m2));
+    var week = weekDates.map(dayTotals).filter(function (d) { return d.rows.length; });
+    var month = monthDates.map(dayTotals).filter(function (d) { return d.rows.length; });
     var loggedDays = month.length;
-    var onTarget = month.filter(function (m) { return m.onTarget; }).length;
+    var onTarget = month.filter(onTargetDay).length;
     C.barChart($("protein-chart"), {
-      items: days.map(function (d) { return { label: d.label, value: d.protein || 0, date: d.date }; }),
+      items: days.map(function (d) { return { label: d.label, value: d.totals.proteinG, date: d.date }; }),
       goal: targets.proteinG, formatY: function (v) { return C.compact(v); },
       tip: function (item) { return "<b>" + dateText(item.date) + "</b><br>" + (item.value ? item.value + " g" : t("food.notLogged")); }
     });
 
-    var waterAvg = mean(week.map(function (m) { return m.waterL; }));
+    var waterAvg = mean(week.map(function (d) { return d.waterL; }));
     var trend = "-";
     if (week.length > 1 && month.length > 2) {
-      trend = mean(week.map(function (m) { return m.calories; })) <= mean(month.map(function (m) { return m.calories; }))
+      trend = mean(week.map(function (d) { return d.calories; })) <= mean(month.map(function (d) { return d.calories; }))
         ? t("food.holding") : t("food.watchWeekends");
     }
     $("food-stats").innerHTML = statGrid([
-      [t("food.kcal7"), week.length ? C.int(mean(week.map(function (m) { return m.calories; }))) + " kcal" : "-", t("common.target") + " " + C.int(targets.kcal)],
-      [t("food.protein7"), week.length ? C.int(mean(week.map(function (m) { return m.proteinG; }))) + " g" : "-", t("common.target") + " " + targets.proteinG + " g"],
+      [t("food.kcal7"), week.length ? C.int(mean(week.map(function (d) { return d.calories; }))) + " kcal" : "-", t("common.target") + " " + C.int(targets.kcal)],
+      [t("food.protein7"), week.length ? C.int(mean(week.map(function (d) { return d.proteinG; }))) + " g" : "-", t("common.target") + " " + targets.proteinG + " g"],
       [t("food.daysLogged"), t("food.of28", { n: loggedDays }), t("food.consistency")],
       [t("food.onTarget"), loggedDays ? t("food.onTargetValue", { pct: Math.round((onTarget / loggedDays) * 100) }) : "-", t("food.onTargetNote", { n: onTarget, total: loggedDays })],
       [t("food.water7"), waterAvg ? waterAvg.toFixed(1) + " L" : "-", t("food.waterNote")],
       [t("food.trend"), trend, t("food.trendNote")]
     ]);
 
-    var recent = meals.slice().sort(function (a, b) { return b.date.localeCompare(a.date); }).slice(0, 10);
-    $("food-table").innerHTML = tableHtml(recent.map(function (m) {
+    var recent = monthDates.slice().reverse().map(dayTotals).filter(function (d) { return d.rows.length; }).slice(0, 10);
+    $("food-table").innerHTML = tableHtml(recent.map(function (d) {
       return [
-        dateText(m.date),
-        m.calories || "-",
-        m.proteinG || "-",
-        m.waterL || "-",
-        m.onTarget ? "<span class=\"tick\">" + t("common.yes") + "</span>" : "<span class=\"miss\">" + t("common.no") + "</span>",
-        m.notes || ""
+        dateText(d.date),
+        C.int(d.calories) || "-",
+        C.int(d.proteinG) || "-",
+        d.waterL ? d.waterL.toFixed(1) : "-",
+        onTargetDay(d) ? "<span class=\"tick\">" + t("common.yes") + "</span>" : "<span class=\"miss\">" + t("common.no") + "</span>",
+        d.templates.join(" + ")
       ];
     }), [t("food.col.date"), t("food.col.kcal"), t("food.col.protein"), t("food.col.water"), t("food.col.onTarget"), t("food.col.notes")]);
   }
@@ -446,7 +469,12 @@
     var gymByDate = {};
     gym.forEach(function (s) { gymByDate[s.date] = true; });
     var mealByDate = {};
-    meals.forEach(function (m) { mealByDate[m.date] = m; });
+    meals.forEach(function (m) {
+      var totals = mealByDate[m.date] || (mealByDate[m.date] = { calories: 0, proteinG: 0, entries: 0 });
+      totals.calories += m.calories || 0;
+      totals.proteinG += m.proteinG || 0;
+      totals.entries += 1;
+    });
 
     var rows = [];
     for (var i = 6; i >= 0; i--) {
@@ -458,8 +486,8 @@
       var checks = [
         wake ? wake <= "08:45" : null,
         stepsByDate[date] !== undefined ? stepsByDate[date] >= p.targets.steps : null,
-        meal && meal.proteinG ? meal.proteinG >= p.targets.proteinG : null,
-        meal && meal.calories ? meal.calories <= p.targets.kcal : null,
+        meal && meal.entries ? meal.proteinG >= p.targets.proteinG : null,
+        meal && meal.entries ? meal.calories <= p.targets.kcal : null,
         gymByDate[date] || runsByDate[date] ? true : (date < today() ? false : null),
         lightsOut ? lightsOut <= "02:30" : null
       ];
@@ -573,6 +601,14 @@
       }).then(function (json) { data.logbook = json; })
         .catch(function (error) { data.logbookError = error.message; data.logbook = { syncedAt: null, gymSessions: [], lifts: [], meals: [], body: [] }; })
     ];
+    /* Optional: written by tools/import-strong.mjs when you export from Strong. */
+    jobs.push(fetch("data/strong.json", { cache: "no-store" })
+      .then(function (response) {
+        if (!response.ok) throw new Error("no Strong import");
+        return response.json();
+      })
+      .then(function (json) { data.strong = json; })
+      .catch(function () { data.strong = null; }));
     Promise.all(jobs).then(function () {
       C.initTheme();
       document.addEventListener("themechange", applyStaticText);

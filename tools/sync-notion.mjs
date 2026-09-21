@@ -35,6 +35,25 @@ const dateOf = (property) => {
 const select = (property) => (property && property.select && property.select.name) || null;
 const checkbox = (property) => !!(property && property.checkbox);
 
+/* Meal templates carry their own calories and protein, so a form entry only
+   needs the template name. Anything typed by hand still wins. */
+const MEAL_TEMPLATES = {
+  "早餐A 蛋+多士+奶": { kcal: 430, protein: 28 },
+  "早餐B 乳酪+燕麥+香蕉": { kcal: 430, protein: 26 },
+  "早餐C 茶葉蛋+豆漿+包": { kcal: 450, protein: 32 },
+  "午餐A 切雞飯 少飯走汁": { kcal: 620, protein: 41 },
+  "午餐B 雞胸+糙米+菜": { kcal: 500, protein: 43 },
+  "午餐C 鮮茄牛肉飯 少飯": { kcal: 600, protein: 33 },
+  "午餐D 便利店": { kcal: 520, protein: 38 },
+  "晚餐A 蒸魚+飯+菜": { kcal: 550, protein: 50 },
+  "晚餐B 雞或牛+番薯+菜": { kcal: 500, protein: 45 },
+  "晚餐C 米線 少油": { kcal: 600, protein: 40 },
+  "晚餐D 豆腐+蝦+菜": { kcal: 520, protein: 45 },
+  "小食 豆漿+香蕉": { kcal: 250, protein: 15 },
+  "乳清蛋白": { kcal: 120, protein: 24 },
+  "外食 估算": { kcal: 700, protein: 35 }
+};
+
 /* Which Notion property maps to which field in logbook.json. */
 const TABLES = {
   gymSessions: {
@@ -59,14 +78,20 @@ const TABLES = {
   },
   meals: {
     label: "Meals",
-    map: (p) => ({
-      date: dateOf(p["Date"]),
-      calories: number(p["Calories"]),
-      proteinG: number(p["Protein g"]),
-      waterL: number(p["Water L"]),
-      onTarget: checkbox(p["On target"]),
-      notes: text(p["Notes"])
-    })
+    map: (p) => {
+      const template = select(p["Template"]);
+      const preset = template ? MEAL_TEMPLATES[template] : null;
+      return {
+        date: dateOf(p["Date"]),
+        meal: select(p["Meal"]) || null,
+        template,
+        calories: number(p["Calories"]) ?? (preset ? preset.kcal : null),
+        proteinG: number(p["Protein g"]) ?? (preset ? preset.protein : null),
+        waterL: number(p["Water L"]),
+        onTarget: checkbox(p["On target"]),
+        notes: text(p["Notes"])
+      };
+    }
   },
   body: {
     label: "Body",
