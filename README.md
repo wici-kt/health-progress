@@ -8,6 +8,7 @@ body fat around 16 to 17 percent), tracked from Apple Health and a Notion logboo
 | Page | What it shows |
 | --- | --- |
 | `/` | Targets, body weight and body fat, gym sessions, running, meals, the daily scoreboard and supporting recovery metrics. Switch between English and Traditional Chinese in the header |
+| `/form/` | A fill-in form for meals, gym sessions and body measurements. Needs the Vercel deployment, because it posts to `/api/notion` (see `docs/deploy-vercel.md`) |
 | `/archive/` | The full Apple Health report in English: 47 metrics, 174 workouts, 137 routes, 6 ECGs |
 | `/zh/archive/` | The same report as a written Traditional Chinese document, generated from `archive/report-zh-hk.md` |
 
@@ -34,6 +35,13 @@ and pairs with the Chinese report page, linked from the language switch on both.
 
 Notion also offers a Form view (Meals → the view menu → New view → Form → Copy link to view),
 which gives you a plain web form to fill on your phone instead of editing the table.
+
+### Hosting options
+
+- **GitHub Pages** serves the read-only pages. Free, no server, deploys on every push.
+- **Vercel** additionally runs `api/notion.js`, the function the `/form/` page posts to.
+  It writes into the same Notion databases with a server-side token, so the Pages dashboard
+  keeps updating exactly as before. Deployment steps: `docs/deploy-vercel.md`.
 
 ## Files
 

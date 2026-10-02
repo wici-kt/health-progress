@@ -1,0 +1,6 @@
+{
+  "name": "health-progress",
+  "private": true,
+  "type": "module",
+  "description": "Apple Health progress dashboard, Notion logbook sync, and the fill-in form."
+}

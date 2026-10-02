@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="zh-Hant-HK">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>記錄 · Logbook</title>
+<meta name="description" content="Fill in meals, gym sessions and body measurements from the phone.">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="../assets/styles.css?v=3">
+<style>
+  .form-tabs { display: flex; gap: 0.3rem; margin-bottom: 1.2rem; }
+  .form-tabs button {
+    border: 1px solid var(--hair); background: none; color: var(--muted);
+    font: inherit; font-size: 0.85rem; padding: 0.4rem 0.8rem; border-radius: var(--radius); cursor: pointer;
+  }
+  .form-tabs button.is-on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .field { margin-bottom: 1rem; }
+  .field label { display: block; font-size: 0.78rem; color: var(--muted); margin-bottom: 0.3rem; font-family: var(--mono); letter-spacing: 0.04em; text-transform: uppercase; }
+  .field input, .field select, .field textarea {
+    width: 100%; padding: 0.55rem 0.6rem; font: inherit; font-size: 0.95rem;
+    border: 1px solid var(--hair); border-radius: var(--radius); background: var(--surface); color: var(--ink);
+  }
+  .field textarea { min-height: 4.5rem; resize: vertical; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+  .submit {
+    width: 100%; padding: 0.8rem; font: inherit; font-size: 1rem; font-weight: 600;
+    background: var(--accent); color: #fff; border: 0; border-radius: var(--radius); cursor: pointer;
+  }
+  .submit:active { transform: translateY(1px); }
+  .submit[disabled] { opacity: 0.6; cursor: default; }
+  .status { margin-top: 1rem; font-size: 0.9rem; }
+  .status.ok { color: var(--accent-ink); }
+  .status.err { color: var(--danger); }
+  .hint { font-size: 0.78rem; color: var(--muted); margin-top: 0.35rem; }
+  @media (max-width: 560px) { .row { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="wordmark" href="../">
+      <span class="wordmark-mark" aria-hidden="true"></span>
+      <span>健康進度</span>
+    </a>
+    <nav class="nav" aria-label="網站">
+      <a href="../">進度總覽</a>
+      <a href="../archive/">健康數據庫</a>
+      <a href="./" class="is-on">記錄</a>
+    </nav>
+    <div class="topbar-controls">
+      <button type="button" class="theme-toggle" id="theme-toggle" aria-label="切換主題">
+        <span class="theme-toggle-label">主題</span>
+        <span class="theme-toggle-value" id="theme-value">自動</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="page-body">
+  <div class="prose" style="max-width:60ch">
+    <h1>記錄</h1>
+    <p class="hero-note" style="margin-bottom:1.5rem">
+      填完按「儲存」，資料會直接寫入 Notion，晚上同步後就會出現在進度頁。每日大約 30 秒。
+    </p>
+
+    <div class="form-tabs" role="tablist">
+      <button type="button" data-tab="meal" class="is-on" role="tab">飲食</button>
+      <button type="button" data-tab="gym" role="tab">健身</button>
+      <button type="button" data-tab="body" role="tab">身體</button>
+    </div>
+
+    <form id="entry" novalidate>
+      <div class="field">
+        <label for="passcode">密碼 Passcode</label>
+        <input id="passcode" type="password" autocomplete="off" placeholder="只在第一次需要輸入">
+        <p class="hint">防止陌生人寫入你的資料，只會存在這部裝置。</p>
+      </div>
+
+      <div class="field">
+        <label for="date">日期 Date</label>
+        <input id="date" type="date" required>
+      </div>
+
+      <div data-panel="meal">
+        <div class="row">
+          <div class="field">
+            <label for="meal">餐別 Meal</label>
+            <select id="meal">
+              <option>早餐</option><option>午餐</option><option>晚餐</option><option>小食</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="template">模板 Template</label>
+            <select id="template"></select>
+          </div>
+        </div>
+        <p class="hint">選模板就會自動計好卡路里同蛋白質，唔需要自己算。</p>
+        <div class="field">
+          <label for="notes">備註 Notes</label>
+          <textarea id="notes" placeholder="例如：食多咗、出街食、飲咗酒"></textarea>
+        </div>
+      </div>
+
+      <div data-panel="gym" hidden>
+        <div class="row">
+          <div class="field">
+            <label for="type">類型 Type</label>
+            <select id="type"><option>A</option><option>B</option><option>C</option></select>
+          </div>
+          <div class="field">
+            <label for="durationMin">時長 (分鐘)</label>
+            <input id="durationMin" type="number" min="0" step="1" inputmode="numeric">
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label for="rpe">RPE (1-10)</label>
+            <input id="rpe" type="number" min="1" max="10" step="1" inputmode="numeric">
+          </div>
+          <div class="field">
+            <label for="exercise">主要動作（可留空）</label>
+            <select id="exercise"></select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label for="sets">組數</label>
+            <input id="sets" type="number" min="1" step="1" inputmode="numeric">
+          </div>
+          <div class="field">
+            <label for="reps">次數</label>
+            <input id="reps" type="number" min="1" step="1" inputmode="numeric">
+          </div>
+        </div>
+        <div class="field">
+          <label for="weightKg">重量 (公斤)</label>
+          <input id="weightKg" type="number" min="0" step="0.5" inputmode="decimal">
+          <p class="hint">只記主要動作就夠。填咗動作、組數、次數、重量就會一併記錄。</p>
+        </div>
+        <div class="field">
+          <label for="gymNotes">備註 Notes</label>
+          <textarea id="gymNotes" placeholder="例如：狀態好、右手有啲緊"></textarea>
+        </div>
+      </div>
+
+      <div data-panel="body" hidden>
+        <div class="row">
+          <div class="field">
+            <label for="waistCm">腰圍 (cm)</label>
+            <input id="waistCm" type="number" min="0" step="0.1" inputmode="decimal">
+          </div>
+          <div class="field">
+            <label for="weightKgBody">體重 (kg，可留空)</label>
+            <input id="weightKgBody" type="number" min="0" step="0.1" inputmode="decimal">
+          </div>
+        </div>
+        <div class="field">
+          <label for="bodyFatPct">體脂 %（可留空）</label>
+          <input id="bodyFatPct" type="number" min="0" step="0.1" inputmode="decimal">
+        </div>
+        <div class="field">
+          <label for="bodyNotes">備註 Notes</label>
+          <textarea id="bodyNotes" placeholder="例如：早上量度、飯前"></textarea>
+        </div>
+      </div>
+
+      <button class="submit" type="submit" id="submit">儲存 Save</button>
+      <p class="status" id="status"></p>
+    </form>
+  </div>
+</main>
+
+<footer class="footer">
+  <p><a href="../">← 返回進度總覽</a></p>
+</footer>
+
+<div class="tip" id="tip" hidden></div>
+<script src="../assets/i18n.js?v=3"></script>
+<script src="../assets/chart.js?v=3"></script>
+<script src="./form.js?v=1"></script>
+</body>
+</html>
