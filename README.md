@@ -3,7 +3,7 @@
 A public progress log for a body composition goal: 79.3 kg to 70 kg (BMI under 25 and
 body fat around 16 to 17 percent), tracked from Apple Health and a Notion logbook.
 
-**Live site:** https://wici-kt.github.io/health-progress/
+**Live site:** hosted on Vercel (the GitHub Pages copy is switched off). Deploy steps: `docs/deploy-vercel.md`.
 
 | Page | What it shows |
 | --- | --- |
@@ -21,7 +21,7 @@ and pairs with the Chinese report page, linked from the language switch on both.
 | Source | Supplies | How it updates |
 | --- | --- | --- |
 | Apple Health export | weight, body fat, BMI, sleep, resting heart rate, HRV, VO2 max, steps, every run and walk | `node tools/refresh-health.mjs ~/Downloads/export.zip`, then commit and push |
-| Notion logbook | gym sessions, main lifts, meals (one row per meal, calories auto-filled from the template), waist measurements | GitHub Action every night at 22:00 Hong Kong time |
+| Notion logbook | gym sessions, main lifts, meals (one row per meal, calories auto-filled from the template), waist measurements | **live**: the dashboard reads `/api/data` on Vercel, cached for one minute. The nightly Action also commits a static fallback |
 | Strong app (optional) | per-set gym detail | `node tools/import-strong.mjs export.csv`, then commit |
 
 ## Logging, the short version
@@ -36,12 +36,11 @@ and pairs with the Chinese report page, linked from the language switch on both.
 Notion also offers a Form view (Meals → the view menu → New view → Form → Copy link to view),
 which gives you a plain web form to fill on your phone instead of editing the table.
 
-### Hosting options
+### Hosting
 
-- **GitHub Pages** serves the read-only pages. Free, no server, deploys on every push.
-- **Vercel** additionally runs `api/notion.js`, the function the `/form/` page posts to.
-  It writes into the same Notion databases with a server-side token, so the Pages dashboard
-  keeps updating exactly as before. Deployment steps: `docs/deploy-vercel.md`.
+Vercel hosts the whole thing: the static pages, `/api/data` (live Notion reads),
+`/api/notion` (form writes) and the `/form/` page. Every push to `main` redeploys.
+The Notion token lives only in Vercel environment variables.
 
 ## Files
 

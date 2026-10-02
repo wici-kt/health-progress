@@ -595,11 +595,29 @@
         if (!r.ok) throw new Error("progress.json " + r.status);
         return r.json();
       }).then(function (json) { data.progress = json; }),
-      fetch("data/logbook.json", { cache: "no-store" }).then(function (r) {
-        if (!r.ok) throw new Error("HTTP " + r.status);
-        return r.json();
-      }).then(function (json) { data.logbook = json; })
-        .catch(function (error) { data.logbookError = error.message; data.logbook = { syncedAt: null, gymSessions: [], lifts: [], meals: [], body: [] }; })
+      /* On Vercel this is live from Notion; on a static copy it 404s and we fall
+         back to the file the nightly sync commits. */
+      fetch("api/data", { cache: "no-store" })
+        .then(function (response) {
+          if (!response.ok) throw new Error("HTTP " + response.status);
+          return response.json();
+        })
+        .then(function (json) {
+          if (json && json.ok === false) throw new Error(json.error || "API error");
+          data.logbook = json;
+        })
+        .catch(function () {
+          return fetch("data/logbook.json", { cache: "no-store" })
+            .then(function (response) {
+              if (!response.ok) throw new Error("HTTP " + response.status);
+              return response.json();
+            })
+            .then(function (json) { data.logbook = json; })
+            .catch(function (error) {
+              data.logbookError = error.message;
+              data.logbook = { syncedAt: null, gymSessions: [], lifts: [], meals: [], body: [] };
+            });
+        })
     ];
     /* Optional: written by tools/import-strong.mjs when you export from Strong. */
     jobs.push(fetch("data/strong.json", { cache: "no-store" })
