@@ -3,7 +3,9 @@
 A public progress log for a body composition goal: 79.3 kg to 70 kg (BMI under 25 and
 body fat around 16 to 17 percent), tracked from Apple Health and a Notion logbook.
 
-**Live site:** hosted on Vercel (the GitHub Pages copy is switched off). Deploy steps: `docs/deploy-vercel.md`.
+**Live site:** https://health-progress-ten.vercel.app
+
+Deploys automatically on every push to `main`. Deploy steps for a fresh setup: `docs/deploy-vercel.md`.
 
 | Page | What it shows |
 | --- | --- |
