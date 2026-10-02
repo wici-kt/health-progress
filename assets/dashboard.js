@@ -597,7 +597,9 @@
       }).then(function (json) { data.progress = json; }),
       /* On Vercel this is live from Notion; on a static copy it 404s and we fall
          back to the file the nightly sync commits. */
-      fetch("api/data", { cache: "no-store" })
+      /* A minute-stamped URL keeps the edge cache from serving a stale copy
+         while still collapsing repeat loads inside the same minute. */
+      fetch("api/data?m=" + Math.floor(Date.now() / 60000), { cache: "no-store" })
         .then(function (response) {
           if (!response.ok) throw new Error("HTTP " + response.status);
           return response.json();
