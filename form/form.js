@@ -86,7 +86,17 @@
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(Object.assign({ passcode: passcode }, payload()))
     })
-      .then(function (response) { return response.json().catch(function () { return { ok: false, error: "HTTP " + response.status }; }); })
+      .then(function (response) {
+        /* GitHub Pages answers POST to an unknown path with 405/404: the static
+           copy has no API, so say that plainly instead of showing a status code. */
+        if (response.status === 405 || response.status === 404) {
+          return {
+            ok: false,
+            error: "這頁要在 Vercel 版本才有 /api/notion，GitHub Pages 只有靜態檔案。請用 Vercel 網址填表（見 docs/deploy-vercel.md）"
+          };
+        }
+        return response.json().catch(function () { return { ok: false, error: "HTTP " + response.status }; });
+      })
       .then(function (result) {
         if (result.ok) {
           status.className = "status ok";
