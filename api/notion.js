@@ -6,11 +6,13 @@
  *
  * POST /api/notion
  *   {
- *     "passcode": "...",            // must match FORM_PASSCODE
  *     "kind": "meal" | "gym" | "body",
  *     "date": "2026-10-02",
  *     ...fields for that kind
  *   }
+ *
+ * Access is gated by middleware.js, which requires a signed session cookie,
+ * so this endpoint only accepts requests from someone who has logged in.
  */
 
 const NOTION_VERSION = "2025-09-03";
@@ -146,12 +148,7 @@ export default async function handler(request, response) {
     return;
   }
 
-  const passcode = process.env.FORM_PASSCODE;
   const body = typeof request.body === "string" ? JSON.parse(request.body || "{}") : request.body || {};
-  if (passcode && body.passcode !== passcode) {
-    response.status(401).json({ ok: false, error: "Wrong passcode" });
-    return;
-  }
 
   try {
     const created = [];

@@ -567,7 +567,17 @@
         : t("footer.notSynced");
     var healthNote = data.progress ? t("footer.health", { date: dateText(data.progress.exportDate.slice(0, 10)) }) : "";
     $("footer-line").innerHTML = healthNote + " &middot; " + syncNote +
-      " &middot; <a href=\"" + (I.lang === "zh" ? "zh/archive/" : "archive/") + "\">" + t("footer.archive") + "</a>";
+      " &middot; <a href=\"" + (I.lang === "zh" ? "zh/archive/" : "archive/") + "\">" + t("footer.archive") + "</a>" +
+      " &middot; <a href=\"form/\">" + (I.lang === "zh" ? "記錄" : "Log") + "</a>" +
+      " &middot; <a href=\"#\" id=\"logout\">" + (I.lang === "zh" ? "登出" : "Sign out") + "</a>";
+    var logout = document.getElementById("logout");
+    if (logout && !logout.dataset.bound) {
+      logout.dataset.bound = "1";
+      logout.addEventListener("click", function (event) {
+        event.preventDefault();
+        fetch("api/logout", { method: "POST" }).then(function () { location.replace("login"); });
+      });
+    }
     $("last-sync").textContent = data.logbook && data.logbook.syncedAt ? data.logbook.syncedAt.slice(0, 10) : t("common.pending");
   }
 

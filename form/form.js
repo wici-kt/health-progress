@@ -74,9 +74,6 @@
     event.preventDefault();
     var button = $("submit");
     var status = $("status");
-    var passcode = $("passcode").value.trim();
-    if (passcode) writeStored("health-passcode", passcode);
-
     button.disabled = true;
     status.className = "status";
     status.textContent = "儲存中…";
@@ -84,9 +81,13 @@
     fetch("/api/notion", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(Object.assign({ passcode: passcode }, payload()))
+      body: JSON.stringify(payload())
     })
       .then(function (response) {
+        if (response.status === 401) {
+          location.replace("/login?next=" + encodeURIComponent(location.pathname));
+          return { ok: false, error: "未登入" };
+        }
         /* GitHub Pages answers POST to an unknown path with 405/404: the static
            copy has no API, so say that plainly instead of showing a status code. */
         if (response.status === 405 || response.status === 404) {
@@ -120,8 +121,6 @@
     fillSelect($("template"), TEMPLATES);
     fillSelect($("exercise"), [""].concat(EXERCISES));
     $("date").value = new Date(Date.now() + 8 * 3600000).toISOString().slice(0, 10);
-    var saved = readStored("health-passcode");
-    if (saved) $("passcode").value = saved;
     document.querySelectorAll("[data-tab]").forEach(function (button) {
       button.addEventListener("click", function () { selectTab(button.dataset.tab); });
     });

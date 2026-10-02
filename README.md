@@ -7,6 +7,12 @@ body fat around 16 to 17 percent), tracked from Apple Health and a Notion logboo
 
 Deploys automatically on every push to `main`. Deploy steps for a fresh setup: `docs/deploy-vercel.md`.
 
+**The site is private.** Every route sits behind a login: `middleware.js` checks a signed,
+HttpOnly session cookie and redirects to `/login` without one, and returns 401 for `/api/*`.
+The password is the `SITE_PASSWORD` environment variable (falling back to `FORM_PASSCODE`),
+and the cookie is signed with the same secret, so no extra key has to be stored. Sessions
+last 30 days; `登出 / Sign out` in the footer clears the cookie.
+
 | Page | What it shows |
 | --- | --- |
 | `/` | Targets, body weight and body fat, gym sessions, running, meals, the daily scoreboard and supporting recovery metrics. Switch between English and Traditional Chinese in the header |
